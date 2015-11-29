@@ -17,18 +17,42 @@ void Student::main()
     int toBuy = safeRandom(1, maxBuy);
     int fav = safeRandom(0, 3);
 
+    VendingMachine *machine = server.getMachine(id);
+
     WATCARD::FWATCard card = office.create(id, 5);
-    WATCARD::FWATCard gift = griup.giftCard();
+    WATCARD::FWATCard gift = group.giftCard();
 
     for(;;)
     {
-        VendingMachine *machine = server.getMachine(id);
-        yield(safeRandom(1, 10))
-       
-        while(!card.available() && !gift.available())
-        {
-                yield();
-        }
+        try
+        { 
+            _Enable
+            {
 
+                yield(safeRandom(1, 10))
+
+                    _Select(card)
+                    {
+                        machine.buy(fav, card);
+                    }
+                or _Select(gift)
+                {
+                    machine.buy(fav, gift);
+                    gift.reset();
+                    gift = group.giftCard();
+                }
+            }
+        }
+        catch(WATCardOffice::Lost)
+        {
+            card = office.create(id, 5);
+        }
+        catch(VendingMachine::Funds)
+        {
+        }
+        catch(VendingMachine::Stock)
+        {
+            machine = server.getMachine(id);
+        }
     }
 }
