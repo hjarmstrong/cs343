@@ -17,6 +17,6 @@ _Monitor MPRNG
     unsigned int operator()( unsigned int l, unsigned int u ) { return operator()( u - l ) + l; } // [l,u]
 };
 
-extern MPRNG safeRandom; // defined in q2main.cpp
+extern MPRNG safeRandom; // defined in main.cpp
 
 #endif // __MPRNG_H__

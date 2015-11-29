@@ -8,6 +8,9 @@
 *.gch
 *.pch
 
+# Dependencies
+*.d
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -26,3 +29,4 @@
 *.exe
 *.out
 *.app
+soda
