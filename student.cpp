@@ -22,6 +22,8 @@ void Student::main()
     WATCARD::FWATCard card = office.create(id, 5);
     WATCARD::FWATCard gift = group.giftCard();
 
+    yield(safeRandom(1, 10));
+
     for(;;)
     {
         try
@@ -29,18 +31,20 @@ void Student::main()
             _Enable
             {
 
-                yield(safeRandom(1, 10))
 
                     _Select(card)
                     {
-                        machine.buy(fav, card);
+                        machine->buy(fav, card);
                     }
-                or _Select(gift)
-                {
-                    machine.buy(fav, gift);
-                    gift.reset();
-                    gift = group.giftCard();
-                }
+                or
+                    _Select(gift)
+                    {
+                        machine->buy(fav, gift);
+                        gift.reset();
+                        gift = group.giftCard();
+                    }
+
+                yield(safeRandom(1, 10));
             }
         }
         catch(WATCardOffice::Lost)
@@ -49,6 +53,7 @@ void Student::main()
         }
         catch(VendingMachine::Funds)
         {
+            office.transfer(id, machine->cost() + 5, card);
         }
         catch(VendingMachine::Stock)
         {
