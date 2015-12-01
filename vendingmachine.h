@@ -13,7 +13,7 @@ _Task VendingMachine {
     unsigned int *currentStock;
     
   public:
-    enum Flavours {blue, cream, root, lime};
+    enum Flavours {blue, cream, root, lime, NUM_FLAVOURS};
     _Event Funds {};                       // insufficient funds
     _Event Stock {};                       // out of stock for particular flavour
     VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost,

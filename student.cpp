@@ -30,19 +30,16 @@ void Student::main()
         { 
             _Enable
             {
-
-
-                    _Select(card)
-                    {
-                        machine->buy(fav, card);
-                    }
+                _Select(card)
+                {
+                   machine->buy(fav, card);
+                }
                 or
-                    _Select(gift)
-                    {
-                        machine->buy(fav, gift);
-                        gift.reset();
-                        gift = group.giftCard();
-                    }
+                _Select(gift)
+                {
+                    machine->buy(fav, gift);
+                    gift.reset();
+                }
 
                 yield(safeRandom(1, 10));
             }

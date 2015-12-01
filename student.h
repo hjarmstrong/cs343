@@ -10,7 +10,7 @@ _Task Student {
     void main();
 
     Printer &print;
-    NameServer &server
+    NameServer &server;
     WATCardOffice &office;
     Groupoff &group;
     unsigned int id;
