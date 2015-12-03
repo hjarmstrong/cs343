@@ -1,5 +1,7 @@
+#include <iostream>
 #include <assert.h>
 #include "printer.h"
+#include "watcardoffice.h"
 
 void Printer::flush()
 {
@@ -11,41 +13,41 @@ void Printer::flush()
             switch(buffer[i].state)
             {
                 case 'D':
-                    cout << buffer[i].value1;
-                    
+                    std::cout << buffer[i].value1;
+
                     if(!(i == Groupoff))
                     {
-                        cout << ',' <<  buffer[i].value2;
+                        std::cout << ',' <<  buffer[i].value2;
                     }
-                break;
-                
+                    break;
+
                 case 'C':     
-                    cout << buffer[i].value1 << ',' <<  buffer[i].value2;
-                break;
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
 
                 case 'T':
-                    cout << buffer[i].value1 << ',' <<  buffer[i].value2;
-                break;
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
 
                 case 'R':
-                    cout << buffer[i].value1;
-                break;
+                    std::cout << buffer[i].value1;
+                    break;
 
                 case 'N':
-                    cout << buffer[i].value1 << ',' <<  buffer[i].value2;
-                break;
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
 
                 case 'P':
-                    cout << buffer[i].value1;
-                break;
+                    std::cout << buffer[i].value1;
+                    break;
 
                 case 'd':
-                    cout << buffer[i].value1 << ',' <<  buffer[i].value2;
-                break;
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
 
                 case 'U':
-                    cout << buffer[i].value1 << ',' <<  buffer[i].value2;
-                break;
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
             }
             buffer[i].inUse = false;
         }
@@ -81,15 +83,15 @@ int Printer::getIndex(Kind kind, unsigned int lid)
         case Vending:
             return 6 + numStudents + lid;
 
-case: Courier:
-      return 6 + numStudents + numVendingMachines + lid; 
+        case Courier:
+            return 6 + numStudents + numVendingMachines + lid; 
     }
     assert(false);
 }
 
     Printer::Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers )
 : elements(numStudents + numVendingMachines + numCouriers + 6), 
-    numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers)
+    numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers),
     buffer(new bufferElement[elements])
 {
 
@@ -129,7 +131,7 @@ Printer::~Printer()
     delete []buffer;
 }
 
-void Printer::print( Kind kind, char state );
+void Printer::print( Kind kind, char state )
 {
     if(state == 'F')
     {
@@ -174,7 +176,7 @@ void Printer::print( Kind kind, char state, int value1, int value2 )
 void Printer::print( Kind kind, unsigned int lid, char state )
 {
     int index = getIndex(kind, lid);
-    
+
     if(state == 'F')
     {
         flush();
@@ -192,11 +194,11 @@ void Printer::print( Kind kind, unsigned int lid, char state )
     }
 }
 
-void Printer::print( Kind kind, int lid, char state, int value1 )
+void Printer::print( Kind kind, unsigned int lid, char state, int value1 )
 {
     int index = getIndex(kind, lid);
-    
-    if(buffer[kind].inUse == true)
+
+    if(buffer[index].inUse == true)
     {
         flush();
     } 
@@ -206,11 +208,11 @@ void Printer::print( Kind kind, int lid, char state, int value1 )
     buffer[index].value1 = value1;
 }
 
-void Printer::print( Kind kind, int lid, char state, int value1, int value2 )
+void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 )
 {
     int index = getIndex(kind, lid);
-    
-    if(buffer[kind].inUse == true)
+
+    if(buffer[index].inUse == true)
     {
         flush();
     } 

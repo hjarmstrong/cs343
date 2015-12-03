@@ -2,12 +2,18 @@
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, 
     unsigned int sodaCost, unsigned int maxStockPerFlavour) : printer(prt), 
-    nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour)
+    nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour),
+    currentStock(new unsigned int[NUM_FLAVOURS])
 {
-    for (int i = 0; i < 4; i++) //Hardcoded number of flavours
+    for (int i = 0; i < NUM_FLAVOURS; i++)
     {
         currentStock[i] = 0;
     }
+}
+
+VendingMachine::~VendingMachine()
+{
+    delete []currentStock;
 }
 
 void VendingMachine::main()
@@ -40,11 +46,11 @@ void VendingMachine::buy(Flavours flavour, WATCard &card)
 {
     if(currentStock[flavour] < 1)
     {
-        _Throw Stock;
+        _Throw Stock();
     }
     else if(card.getBalance() < sodaCost)
     {
-        _Throw Funds;
+        _Throw Funds();
     }
     else
     {

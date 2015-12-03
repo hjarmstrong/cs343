@@ -1,6 +1,6 @@
 #include "bank.h"
 
-Bank::Bank(unsinged int numStudents) : numStudents(numStudents) 
+Bank::Bank(unsigned int numStudents) : numStudents(numStudents), accounts(new unsigned int [numStudents])
 {
     for(unsigned int i = 0; i < numStudents; i++)
     {
@@ -8,14 +8,19 @@ Bank::Bank(unsinged int numStudents) : numStudents(numStudents)
     }
 }
 
+Bank::~Bank()
+{
+    delete []accounts;
+}
+
 void Bank::deposit(unsigned int id, unsigned int amount)
 {
-    accounts[i] += amount;
+    accounts[id] += amount;
 }
 
 void Bank::withdraw(unsigned int id, unsigned int amount)
 {
-    while(accounts[i] < amount) 
+    while(accounts[id] < amount) 
     {
         _Accept(~Bank)
         {
@@ -23,5 +28,5 @@ void Bank::withdraw(unsigned int id, unsigned int amount)
         }
         or _Accept(deposit);
     }
-    accounts[i] -= amount;
+    accounts[id] -= amount;
 }

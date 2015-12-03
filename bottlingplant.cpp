@@ -1,5 +1,6 @@
 #include "bottlingplant.h"
 #include "vendingmachine.h"
+#include "truck.h"
 #include "MPRNG.h"
 
 BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,

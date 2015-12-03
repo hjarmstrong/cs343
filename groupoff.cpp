@@ -1,26 +1,12 @@
 #include "groupoff.h"
 #include "watcard.h"
-
-_Task Groupoff {
-  private:
-    Printer &print;
-    unsigned int numStudents;
-    unsigned int sodaCost;
-    unsigned int groupoffDela;
-
-    std::vector<WATCard::FWATCard> cards;
-    void main();
-  public:
-    Groupoff( Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
-    WATCard::FWATCard giftCard();
-};
-
+#include "MPRNG.h"
 
 void Groupoff::main()
 {
     for(unsigned int i = 0; i < numStudents; i++)
     {
-        _Accept(Groupoff::giftCard) //Accept a call from each student
+        _Accept(giftCard) //Accept a call from each student
     }
     for(unsigned int i = 0; i < numStudents; i++)
     {
@@ -31,14 +17,13 @@ void Groupoff::main()
         _Else
         {
             yield(groupoffDelay);
-            WATCard card = new WATCard();
-            card.deposit(sodaCost);
-            cards[safeRandom(0, numStudents-1)] = card;
+            WATCard *card = new WATCard();
+            card->deposit(sodaCost);
+            
+            int index = safeRandom(0, cards.size());
+            cards.at(index).delivery(card);
+            cards.erase(cards.begin() + index);
         }
-    }
-    _Accept(~Groupoff)
-    {
-        return;
     }
 }
 

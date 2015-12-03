@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "namerserver.h"
+#include "nameserver.h"
 
 NameServer::NameServer(Printer &prt, unsigned int numVendingMachines, unsigned int numStudents) :
 print(prt), numVendingMachines(numVendingMachines), numStudents(numStudents)
@@ -35,13 +35,13 @@ void NameServer::VMregister(VendingMachine *vendingmachine)
    machineList[temp] = vendingmachine;
 }
 
-VendingMachine *VendingMachine::getMachine(unsigned int id)
+VendingMachine *NameServer::getMachine(unsigned int id)
 {
     assert(id < numRegisteredMachines);
     return machineList[id];
 }
 
-VendingMachine **VendingMachine::getMachineList()
+VendingMachine **NameServer::getMachineList()
 {
     return machineList;
 }

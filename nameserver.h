@@ -9,7 +9,7 @@ _Task NameServer;
 _Task NameServer {
     void main();
 
-    Printer print;
+    Printer &print;
     unsigned int numVendingMachines;
     unsigned int numRegisteredMachines = 0;
     unsigned int numStudents;

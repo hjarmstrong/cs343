@@ -4,7 +4,7 @@
 Parent::Parent(Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay) : 
     print(prt), bank(bank), numStudents(numStudents), parentalDelay(parentalDelay) {}
 
-Parent::main()
+void Parent::main()
 {
     _Accept(~Parent)
     {
@@ -15,7 +15,7 @@ Parent::main()
         yield(parentalDelay);
         
         int student = safeRandom(1, numStudents);
-        int amount = safeRandom(1, 3));
+        int amount = safeRandom(1, 3);
 
         bank.deposit(student, amount);
     }

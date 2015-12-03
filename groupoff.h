@@ -1,8 +1,9 @@
 #ifndef GROUPOFF_H
 #define GROUPOFF_H
 
-#include "watcard.h"
 #include <vector>
+#include "watcard.h"
+#include "printer.h"
 
 _Task Groupoff {
   private:

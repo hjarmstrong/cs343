@@ -9,7 +9,7 @@ _Task Parent
   private:
     void main();
     Printer &print;
-    Bank bank;
+    Bank &bank;
     unsigned int numStudents;
     unsigned int parentalDelay;
   public:

@@ -60,7 +60,7 @@ void uMain::main()
 
 
 
-    Printer output(voters);
+    Printer output(params.numStudents, params.numVendingMachines, params.numCouriers);
     Bank bank(params.numStudents);
     Parent parent(output, bank, params.numStudents, params.parentalDelay);
     WATCardOffice office(output, bank, params.numCouriers);

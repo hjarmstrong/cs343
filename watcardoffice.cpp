@@ -1,42 +1,60 @@
+#include "MPRNG.h"
+#include <vector>
 #include "watcardoffice.h"
 #include "watcard.h"
 
-WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers ) : 
-    print(prt), bank(bank), numCouriers(numCouriers)
+    WATCardOffice::WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers )
+: print(prt), bank(bank), numCouriers(numCouriers)
 {
+}
+
+WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount)
+{
+    WATCard::FWATCard newCard;
+    work.push(new Job(sid, amount, newCard, NULL));
+    return newCard;
 }
 
 void WATCardOffice::main()
 {
-    Courier couriers[numCouriers];
+    std::vector<Courier *> couriers;
+    couriers.reserve(numCouriers);
+
+    for(unsigned int i = 0; i < numCouriers; i++)
+    {
+        couriers.push_back(new Courier(*this, bank));
+    }
 
     for(;;)
     {
-        _Accept(create);
+        _Accept(~WATCardOffice)
+        {
+            for(unsigned int i = 0; i < couriers.size(); i++)
+            {
+                delete couriers.at(i);
+            }
+            return;
+        }
+        or _Accept(create);
     }
 }
 
-WATCard::FWATCard create(unsigned int sid, unsigned int amount)
+WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount, WATCard *card)
 {
-    FWATCard newCard;
-    work.push(new Job(sid, amount, newCard));
+    WATCard::FWATCard newCard;
+    work.push(new Job(sid, amount, newCard, card));
     return newCard;
 }
 
-WATCard::FWATCard transfer(unsigned int sid, unsigned int amount, WATCard *card)
-{
-}
-
-Job *requestWork()
+WATCardOffice::Job *WATCardOffice::requestWork()
 {
     if(work.empty())
     {
-        _Accept(~WATCardOfiice)
+        _Accept(~WATCardOffice)
         {
-            return;
+            return NULL;
         }
-        or
-            _Accept(create)
+        or _Accept(create);
     }
 
     Job *ret = work.front();
@@ -45,27 +63,43 @@ Job *requestWork()
 }
 
 
-    Courier::Courier(WATCardOffice off, Bank bnk)
+    WATCardOffice::Courier::Courier(WATCardOffice &off, Bank &bnk)
 : office(off), bank(bnk)
 {
 }
 
-void Courier::main()
+void WATCardOffice::Courier::main()
 {
     for(;;)
     {
         Job *current = office.requestWork();
-        bank.widthdraw(current->id, current->reqVal);
+        
+        if(!current)
+        {
+            return;
+        }
+
+        bank.withdraw(current->id, current->reqVal);
         if(safeRandom(0,5) == 0)
         {
-            current->card.exception(new Lost());
+            current->result.exception(new Lost());
         }
         else
         {
-            WATCard *card =  new WATCard();
+            WATCard *card;
+
+            if(current->oldcard == NULL)
+            {
+                card =  new WATCard();
+            }
+            else
+            {
+                card = current->oldcard;
+            }
+
             card->deposit(current->reqVal);
-            current->card = card;
+            current->result.delivery(card);
         }
-        delete job;
+        delete current;
     }
 }

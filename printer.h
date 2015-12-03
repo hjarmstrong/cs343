@@ -17,16 +17,19 @@ struct bufferElement
 
 _Monitor Printer 
 {
-
-    bufferElement *buffer;
     unsigned int elements;
+    unsigned int numStudents;
+    unsigned int numVendingMachines;
+    unsigned int numCouriers;
+    
+    bufferElement *buffer;
 
     void flush();
-    void finalState();
 
     public:
     enum Kind { Parent, Groupoff, WATCardOffice, NameServer, Truck, BottlingPlant, Student, Vending, Courier };
     Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );
+    ~Printer();
     void print( Kind kind, char state );
     void print( Kind kind, char state, int value1 );
     void print( Kind kind, char state, int value1, int value2 );
@@ -36,6 +39,7 @@ _Monitor Printer
     
     private:
     int getIndex(Kind kind, unsigned int lid);
+    void finalState(Kind kind, unsigned int id);
 };
 
 #endif

@@ -13,17 +13,18 @@ _Task WATCardOffice
         unsigned int id;
         unsigned int reqVal;
 
-        WATCard::FWATCard result;        
-        Job(unsigned int id, unsigned int reqVal, WATCard::FWATCard card) 
-            : id(id), reqVal(reqVal), result(card)
+        WATCard::FWATCard result;       
+        WATCard *oldcard; 
+        Job(unsigned int id, unsigned int reqVal, WATCard::FWATCard card, WATCard *oldcard) 
+            : id(id), reqVal(reqVal), result(card), oldcard(oldcard)
         {
         }
     };
 
     _Task Courier 
     {
-        Bank &bank;
         WATCardOffice &office;
+        Bank &bank;
         void main();
 
         public:
