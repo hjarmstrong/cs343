@@ -3,17 +3,7 @@
 
 #include <iostream>
 
-struct bufferElement
-{
-    bool inUse;
-    char state;
-    unsigned int lid;
-    int value1;
-    int value2;
-    bufferElement() : inUse(false), lid(~0u)
-    {
-    }
-};
+struct bufferElement;
 
 _Monitor Printer 
 {
@@ -40,6 +30,19 @@ _Monitor Printer
     private:
     int getIndex(Kind kind, unsigned int lid);
     void finalState(Kind kind, unsigned int id);
+};
+
+struct bufferElement
+{
+    bool inUse;
+    char state;
+    Printer::Kind kind;
+    unsigned int lid;
+    int value1;
+    int value2;
+    bufferElement() : inUse(false), lid(~0u)
+    {
+    }
 };
 
 #endif

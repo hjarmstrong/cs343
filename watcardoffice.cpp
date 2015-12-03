@@ -25,7 +25,7 @@ void WATCardOffice::main()
 
     for(unsigned int i = 0; i < numCouriers; i++)
     {
-        couriers.push_back(new Courier(*this, bank));
+        couriers.push_back(new Courier(print, *this, bank));
     }
 
     for(;;)
@@ -72,22 +72,26 @@ WATCardOffice::Job *WATCardOffice::requestWork()
 }
 
 
-    WATCardOffice::Courier::Courier(WATCardOffice &off, Bank &bnk)
-: office(off), bank(bnk)
+    WATCardOffice::Courier::Courier(Printer &print, WATCardOffice &off, Bank &bnk)
+: print(print), office(off), bank(bnk)
 {
+    print.print(Printer::Courier, 'S');
 }
 
 void WATCardOffice::Courier::main()
 {
     for(;;)
     {
+
         Job *current = office.requestWork();
         
         if(!current)
         {
+            print.print(Printer::Courier, 'F');
             return;
         }
 
+        print.print(Printer::Courier, 't', current->id, current->reqVal);
         bank.withdraw(current->id, current->reqVal);
         if(safeRandom(0,5) == 0)
         {
@@ -108,6 +112,7 @@ void WATCardOffice::Courier::main()
 
             card->deposit(current->reqVal);
             current->result.delivery(card);
+            print.print(Printer::Courier, 'T', current->id, current->reqVal);
         }
         delete current;
     }

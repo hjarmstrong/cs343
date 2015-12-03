@@ -27,6 +27,7 @@ VendingMachine *NameServer::getMachine(unsigned int id)
     assignments[id] = (assignments[id] + 1) % numVendingMachines;
 
     print.print(Printer::NameServer, 'N', id, index);
+    print.print(Printer::Student, id, 'V', index);
     return machineList[index];
 }
 

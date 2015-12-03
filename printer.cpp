@@ -12,10 +12,24 @@ void Printer::flush()
             std::cout << buffer[i].state;
             switch(buffer[i].state)
             {
+                case 'S':
+                    if(buffer[i].kind == Student)
+                    {
+
+                        std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    }
+
+                    if(buffer[i].kind == Vending)
+                    {
+                        std::cout << buffer[i].value1;
+                    }
+
+                    break;
+
                 case 'D':
                     std::cout << buffer[i].value1;
 
-                    if(!(i == Groupoff))
+                    if(i != Groupoff)
                     {
                         std::cout << ',' <<  buffer[i].value2;
                     }
@@ -30,7 +44,10 @@ void Printer::flush()
                     break;
 
                 case 'R':
-                    std::cout << buffer[i].value1;
+                    if(buffer[i].kind != Vending)
+                    {
+                        std::cout << buffer[i].value1;
+                    }
                     break;
 
                 case 'N':
@@ -38,7 +55,10 @@ void Printer::flush()
                     break;
 
                 case 'P':
-                    std::cout << buffer[i].value1;
+                    if(i != BottlingPlant)
+                    {
+                        std::cout << buffer[i].value1;
+                    }
                     break;
 
                 case 'd':
@@ -47,6 +67,27 @@ void Printer::flush()
 
                 case 'U':
                     std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
+
+                case 't':
+                    std::cout << buffer[i].value1 << ',' <<  buffer[i].value2;
+                    break;
+
+                case 'G':  
+                    std::cout << buffer[i].value1;
+                    break;
+
+                case 'V': 
+                    std::cout << buffer[i].value1;
+                    break;
+
+                case 'B':
+                    std::cout << buffer[i].value1;
+
+                    if(buffer[i].kind != Student)
+                    {
+                        std::cout << ',' <<  buffer[i].value2;
+                    }
                     break;
             }
             buffer[i].inUse = false;
@@ -145,6 +186,7 @@ void Printer::print( Kind kind, char state )
             flush();
         }
         buffer[kind].inUse = true; 
+        buffer[kind].kind = kind;
         buffer[kind].state = state;
     }
 }
@@ -156,6 +198,7 @@ void Printer::print( Kind kind, char state, int value1 )
         flush();
     } 
     buffer[kind].inUse = true;
+    buffer[kind].kind = kind;
     buffer[kind].state = state;
     buffer[kind].value1 = value1;
 }
@@ -168,6 +211,7 @@ void Printer::print( Kind kind, char state, int value1, int value2 )
         flush();
     } 
     buffer[kind].inUse = true;
+    buffer[kind].kind = kind;
     buffer[kind].state = state;
     buffer[kind].value1 = value1;
     buffer[kind].value2 = value2;
@@ -189,6 +233,7 @@ void Printer::print( Kind kind, unsigned int lid, char state )
             flush();
         }
         buffer[index].inUse = true; 
+        buffer[index].kind = kind;
         buffer[index].state = state;
         buffer[index].lid = lid;
     }
@@ -203,6 +248,7 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 )
         flush();
     } 
     buffer[index].inUse = true;
+    buffer[index].kind = kind;
     buffer[index].state = state;
     buffer[index].lid = lid;
     buffer[index].value1 = value1;
@@ -217,6 +263,7 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
         flush();
     } 
     buffer[index].inUse = true;
+    buffer[index].kind = kind;
     buffer[index].state = state;
     buffer[index].lid = lid;
     buffer[index].value1 = value1;

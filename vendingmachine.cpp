@@ -1,10 +1,12 @@
 #include "vendingmachine.h"
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, 
-    unsigned int sodaCost, unsigned int maxStockPerFlavour) : printer(prt), 
+    unsigned int sodaCost, unsigned int maxStockPerFlavour) : print(prt), 
     nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour),
     currentStock(new unsigned int[NUM_FLAVOURS])
 {
+    print.print(Printer::Vending, 'S', sodaCost);
+
     for (int i = 0; i < NUM_FLAVOURS; i++)
     {
         currentStock[i] = 0;
@@ -24,16 +26,19 @@ void VendingMachine::main()
     {
         _Accept(~VendingMachine)
         {
+            print.print(Printer::Vending, 'F');
             return;
         }
         or _Accept(VendingMachine::inventory)
         {
+            print.print(Printer::Vending, 'r');
             _Accept(~VendingMachine)
             {
                 return;
             }
             or _Accept(VendingMachine::restocked)
             {
+                print.print(Printer::Vending, 'R');
             }
         }
         or _Accept(VendingMachine::buy)
@@ -54,8 +59,11 @@ void VendingMachine::buy(Flavours flavour, WATCard &card)
     }
     else
     {
-        currentStock[int(flavour)] -= 1;
+        
+        currentStock[flavour] -= 1;
         card.withdraw(sodaCost);
+        
+        print.print(Printer::Vending, 'B', flavour, currentStock[flavour]);
     }
 }
 

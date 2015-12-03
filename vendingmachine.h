@@ -12,7 +12,7 @@ _Task VendingMachine
   private:
     void main();
 
-    Printer &printer; 
+    Printer &print; 
     NameServer &nameServer;
     unsigned int id;
     unsigned int sodaCost;

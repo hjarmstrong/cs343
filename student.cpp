@@ -17,6 +17,8 @@ void Student::main()
     unsigned int toBuy = safeRandom(1, maxBuy);
     VendingMachine::Flavours fav = static_cast<VendingMachine::Flavours>(safeRandom(0, 3));
 
+    print.print(Printer::Student, id, 'S', fav, toBuy);
+
     VendingMachine *machine = server.getMachine(id);
 
     WATCard::FWATCard card = office.create(id, 5);
@@ -33,11 +35,14 @@ void Student::main()
                 _Select(card)
                 {
                    machine->buy(fav, *card);
+                   print.print(Printer::Student, id, 'B', (*card).getBalance());
                 }
                 or
                 _Select(gift)
                 {
-                    machine->buy(fav, *gift);
+                    machine->buy(fav, *gift); 
+    print.print(Printer::Student, id, 'G', (*gift).getBalance());
+                    
                     gift.reset();
                 }
 
@@ -46,6 +51,8 @@ void Student::main()
         }
         catch(WATCardOffice::Lost)
         {
+            print.print(Printer::Student, id, 'L');
+
             card = office.create(id, 5);
             i--;
         }
@@ -60,4 +67,7 @@ void Student::main()
             i--;
         }
     }
+
+
+   print.print(Printer::Student, id, 'F');
 }

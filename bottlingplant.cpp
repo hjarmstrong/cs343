@@ -9,6 +9,7 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
 : print(prt), server(nameServer), machines(numVendingMachines), maxShipped(maxShippedPerFlavour),
     maxStock(maxStockPerFlavour), time(timeBetweenShipments), shutdown(false)
 {
+    print.print(Printer::BottlingPlant, 'S');
 }
 
 void BottlingPlant::main()
@@ -19,6 +20,7 @@ void BottlingPlant::main()
     {
         _Accept(~BottlingPlant)
         {
+            print.print(Printer::BottlingPlant, 'F');
             break;
         }
         _Else
@@ -26,6 +28,8 @@ void BottlingPlant::main()
             generate = safeRandom(0, maxShipped);
 
             yield(time);
+            print.print(Printer::BottlingPlant, 'G', generate);
+
             // Wait for truck to puck up production run
             _Accept(getShipment);
         }
@@ -45,4 +49,5 @@ void BottlingPlant::getShipment(unsigned int cargo[])
     {
         cargo[i] = generate;
     }
+    print.print(Printer::BottlingPlant, 'P');
 }
