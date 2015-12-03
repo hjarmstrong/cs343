@@ -22,7 +22,7 @@ namespace
 {
     void usage()
     {
-        std::cout << "Usage: ./vote Voters (> 0 & V mod G = 0, default 6)  Group (> 0 & odd, default 3)  Seed (> 0)" << std::endl;
+        std::cout << "Usage: ./soda [ config-file [ random-seed (> 0) ] ]" << std::endl;
 
     }
 }
@@ -46,10 +46,17 @@ void uMain::main()
             safeRandom.seed(seed);
         } /* FALL THROUGH! */
         case 2:
+        {
             processConfigFile(argv[1], params); 
-         break
+        } 
+        break;
 
          default:
+         {
+             usage();
+             return;
+         }
+    }
              
                     Printer output(voters);
                     TallyVotes tally(groupSize, output);
@@ -68,6 +75,5 @@ void uMain::main()
 
                     delete []tasks;
 
-                    std::cout << "=================" << std::endl;
-                    std::cout << "All tours started" << std::endl;
-    }
+                    std::cout << "***********************" << std::endl;
+}    
