@@ -96,7 +96,7 @@ int Printer::getIndex(Kind kind, unsigned int lid)
 {
 
     std::cout << "Parent" << "\t";
-    std::cout << "Groupoff" << "\t";
+    std::cout << "Gropoff" << "\t";
     std::cout << "WATOff" << "\t";
     std::cout << "Names" << "\t";
     std::cout << "Truck" << "\t";

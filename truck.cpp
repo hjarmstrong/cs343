@@ -1,11 +1,25 @@
 #include "truck.h"
 #include "MPRNG.h"
 
+namespace
+{
+    int totalShipment(unsigned int *cargo)
+    {
+        int totalSodas = 0;
+        for(int i = 0; i < VendingMachine::NUM_FLAVOURS; i++)
+        {
+            totalSodas += cargo[i];
+        }
+        return totalSodas;
+    }
+}
+
 Truck::Truck( Printer &prt, NameServer &nameServer, BottlingPlant &plant,
         unsigned int numVendingMachines, unsigned int maxStockPerFlavour )
 : print(prt), server(nameServer), plant(plant),
     numMachines(numVendingMachines), maxStock(maxStockPerFlavour) 
 {
+    print.print(Printer::Truck, 'S');
 }
 
 void Truck::main()
@@ -22,11 +36,13 @@ void Truck::main()
             _Enable
             {
                 plant.getShipment(cargo); 
+                print.print(Printer::Truck, 'P', totalShipment(cargo));
             }
         }
         catch(BottlingPlant::Shutdown)
         {
             // no more soda, we are done
+            print.print(Printer::Truck, 'F');
             return;
         }
 
@@ -36,6 +52,7 @@ void Truck::main()
             lastMachine = (lastMachine + i) % numMachines;
 
             unsigned int *stock = machines[lastMachine]->inventory();
+            print.print(Printer::Truck, 'd', lastMachine, totalShipment(cargo));
 
             for(int j = 0; j < VendingMachine::NUM_FLAVOURS; j++)
             {
@@ -45,11 +62,15 @@ void Truck::main()
                     if(cargo[j] == 0)
                     {
                         zeros++;
+                        print.print(Printer::Truck, 'U', lastMachine, maxStock - stock[j]);
                     }
 
                     stock[j]++;
                 }
             }
+                        
+            print.print(Printer::Truck, 'U', lastMachine, totalShipment(cargo));
+
             if(zeros == VendingMachine::NUM_FLAVOURS)
             {
                 // We are out of ssoda, remeber our last location

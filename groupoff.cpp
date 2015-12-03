@@ -12,6 +12,7 @@ void Groupoff::main()
     {
         _Accept(~Groupoff)
         {
+            print.print(Printer::Groupoff, 'F');
             return;
         }
         _Else
@@ -21,7 +22,10 @@ void Groupoff::main()
             card->deposit(sodaCost);
             
             int index = safeRandom(0, cards.size());
+            
             cards.at(index).delivery(card);
+            print.print(Printer::Groupoff, 'D', sodaCost);
+
             cards.erase(cards.begin() + index);
         }
     }
@@ -30,6 +34,7 @@ void Groupoff::main()
 Groupoff::Groupoff(Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay) : 
 print(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay) 
 {
+    print.print(Printer::Groupoff, 'S');
 }
 
 WATCard::FWATCard Groupoff::giftCard()

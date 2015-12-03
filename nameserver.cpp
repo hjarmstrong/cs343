@@ -2,8 +2,37 @@
 #include "nameserver.h"
 
 NameServer::NameServer(Printer &prt, unsigned int numVendingMachines, unsigned int numStudents) :
-print(prt), numVendingMachines(numVendingMachines), numStudents(numStudents)
+    print(prt), numVendingMachines(numVendingMachines), numStudents(numStudents)
 {
+    print.print(Printer::NameServer, 'S');
+
+    for(unsigned int i = 0; i < numStudents; i++)
+    {
+        assignments[i] = i % numVendingMachines;
+    }
+}
+
+void NameServer::VMregister(VendingMachine *vendingmachine)
+{
+    unsigned int temp = numRegisteredMachines;
+    machineList[temp] = vendingmachine;
+    numRegisteredMachines++;
+
+    print.print(Printer::NameServer, 'R', temp);
+}
+
+VendingMachine *NameServer::getMachine(unsigned int id)
+{
+    int index = assignments[id];
+    assignments[id] = (assignments[id] + 1) % numVendingMachines;
+
+    print.print(Printer::NameServer, 'N', id, index);
+    return machineList[index];
+}
+
+VendingMachine **NameServer::getMachineList()
+{
+    return machineList;
 }
 
 void NameServer::main()
@@ -12,6 +41,7 @@ void NameServer::main()
     {
         _Accept(~NameServer)
         {
+            assert(false);
             return;
         }
         _Accept(NameServer::VMregister)
@@ -23,25 +53,12 @@ void NameServer::main()
     {
         _Accept(~NameServer)
         {
+            print.print(Printer::NameServer, 'F');
             return;
         }
+        or
+            _Accept(getMachine) {}
+        or
+            _Accept(getMachineList);
     }
-}
-
-void NameServer::VMregister(VendingMachine *vendingmachine)
-{
-   unsigned int temp = numRegisteredMachines;
-   numRegisteredMachines += 1; 
-   machineList[temp] = vendingmachine;
-}
-
-VendingMachine *NameServer::getMachine(unsigned int id)
-{
-    assert(id < numRegisteredMachines);
-    return machineList[id];
-}
-
-VendingMachine **NameServer::getMachineList()
-{
-    return machineList;
 }
