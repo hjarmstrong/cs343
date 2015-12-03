@@ -5,7 +5,7 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
     nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour),
     currentStock(new unsigned int[NUM_FLAVOURS])
 {
-    print.print(Printer::Vending, 'S', sodaCost);
+    print.print(Printer::Vending, id, 'S', sodaCost);
 
     for (int i = 0; i < NUM_FLAVOURS; i++)
     {
@@ -26,19 +26,19 @@ void VendingMachine::main()
     {
         _Accept(~VendingMachine)
         {
-            print.print(Printer::Vending, 'F');
+            print.print(Printer::Vending, id, 'F');
             return;
         }
         or _Accept(VendingMachine::inventory)
         {
-            print.print(Printer::Vending, 'r');
+            print.print(Printer::Vending, id, 'r');
             _Accept(~VendingMachine)
             {
                 return;
             }
             or _Accept(VendingMachine::restocked)
             {
-                print.print(Printer::Vending, 'R');
+                print.print(Printer::Vending, id, 'R');
             }
         }
         or _Accept(VendingMachine::buy)
@@ -63,7 +63,7 @@ void VendingMachine::buy(Flavours flavour, WATCard &card)
         currentStock[flavour] -= 1;
         card.withdraw(sodaCost);
         
-        print.print(Printer::Vending, 'B', flavour, currentStock[flavour]);
+        print.print(Printer::Vending, id, 'B', flavour, currentStock[flavour]);
     }
 }
 
