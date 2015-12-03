@@ -1,20 +1,43 @@
 #ifndef WATCARDOFFICE_H
 #define WATCARDOFFICE_H
 
-_Task WATCardOffice {
-    struct Job {                           // marshalled arguments and return future
-        Args args;                         // call arguments (YOU DEFINE "Args")
-        WATCard::FWATCard result;          // return future
-        Job(Args args) : args( args ) {}
+#include <queue>
+#include "printer.h"
+#include "bank.h"
+#include "watcard.h"
+
+_Task WATCardOffice 
+{
+    struct Job 
+    {                           
+        unsigned int id;
+        unsigned int reqVal;
+
+        WATCard::FWATCard result;        
+        Job(unsigned int id, unsigned int reqVal, WATCard::FWATCard card) 
+            : id(id), reqVal(reqVal), result(card)
+        {
+        }
     };
-    _Task Courier { ... };                 // communicates with bank
+
+    _Task Courier 
+    {
+        Bank &bank;
+        WATCardOffice &office;
+        void main();
+
+        public:
+        Courier(WATCardOffice &, Bank &);
+    };
 
     void main();
+
+    std::queue<Job *> work;
 
     Printer &print;
     Bank &bank;
     unsigned int numCouriers;
-  public:
+    public:
     _Event Lost {};                        // lost WATCard
     WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers);
     WATCard::FWATCard create(unsigned int sid, unsigned int amount);

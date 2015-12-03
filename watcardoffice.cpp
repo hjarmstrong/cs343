@@ -1,33 +1,71 @@
-_Task WATCardOffice {
-    struct Job {                           // marshalled arguments and return future
-        Args args;                         // call arguments (YOU DEFINE "Args")
-        WATCard::FWATCard result;          // return future
-        Job(Args args) : args( args ) {}
-    };
-    _Task Courier { ... };                 // communicates with bank
-
-    void main();
-
-    Printer &print;
-    Bank &bank;
-    unsigned int numCouriers;
-  public:
-    _Event Lost {};                        // lost WATCard
-    WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers);
-    WATCard::FWATCard create(unsigned int sid, unsigned int amount);
-    WATCard::FWATCard transfer(unsigned int sid, unsigned int amount, WATCard *card);
-    Job *requestWork();
-};
-
 #include "watcardoffice.h"
+#include "watcard.h"
 
 WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers ) : 
-print(prt), bank(bank), numCouriers(numCouriers)
+    print(prt), bank(bank), numCouriers(numCouriers)
 {
 }
 
 void WATCardOffice::main()
 {
-    //Need to write courier task.
+    Courier couriers[numCouriers];
+
+    for(;;)
+    {
+        _Accept(create);
+    }
 }
 
+WATCard::FWATCard create(unsigned int sid, unsigned int amount)
+{
+    FWATCard newCard;
+    work.push(new Job(sid, amount, newCard));
+    return newCard;
+}
+
+WATCard::FWATCard transfer(unsigned int sid, unsigned int amount, WATCard *card)
+{
+}
+
+Job *requestWork()
+{
+    if(work.empty())
+    {
+        _Accept(~WATCardOfiice)
+        {
+            return;
+        }
+        or
+            _Accept(create)
+    }
+
+    Job *ret = work.front();
+    work.pop();
+    return ret;
+}
+
+
+    Courier::Courier(WATCardOffice off, Bank bnk)
+: office(off), bank(bnk)
+{
+}
+
+void Courier::main()
+{
+    for(;;)
+    {
+        Job *current = office.requestWork();
+        bank.widthdraw(current->id, current->reqVal);
+        if(safeRandom(0,5) == 0)
+        {
+            current->card.exception(new Lost());
+        }
+        else
+        {
+            WATCard *card =  new WATCard();
+            card->deposit(current->reqVal);
+            current->card = card;
+        }
+        delete job;
+    }
+}

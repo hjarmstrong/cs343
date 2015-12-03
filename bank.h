@@ -4,7 +4,7 @@
 _Monitor Bank {
   private:
     unsigned int numStudents;
-    unsinged int *accounts;
+    unsigned int *accounts;
   public:
     Bank( unsigned int numStudents );
     void deposit( unsigned int id, unsigned int amount );

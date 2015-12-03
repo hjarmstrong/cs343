@@ -4,14 +4,14 @@
 #include "printer.h"
 #include "bank.h"
 
-Task Parent 
+_Task Parent 
 {
   private:
     void main();
     Printer &print;
     Bank bank;
-    unsinged int numStudents;
-    unsinged int parentalDelay;
+    unsigned int numStudents;
+    unsigned int parentalDelay;
   public:
     Parent( Printer &prt, Bank &bank, unsigned int numStudents, unsigned int parentalDelay );
 };

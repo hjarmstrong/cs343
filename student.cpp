@@ -24,7 +24,7 @@ void Student::main()
 
     yield(safeRandom(1, 10));
 
-    for(;;)
+    for(int i = 0; i <maxBuy; i++)
     {
         try
         { 
@@ -47,14 +47,17 @@ void Student::main()
         catch(WATCardOffice::Lost)
         {
             card = office.create(id, 5);
+            i--;
         }
         catch(VendingMachine::Funds)
         {
             office.transfer(id, machine->cost() + 5, card);
+            i--;
         }
         catch(VendingMachine::Stock)
         {
             machine = server.getMachine(id);
+            i--;
         }
     }
 }

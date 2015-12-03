@@ -1,5 +1,5 @@
-#include "assert.h"
-#include "q3printer.h"
+#include <assert.h>
+#include "printer.h"
 
 void Printer::flush()
 {

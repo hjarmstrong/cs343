@@ -1,7 +1,7 @@
 #ifndef TRUCK_H
 #define TRUCK_H
 
-#include "bottlingplaint.h"
+#include "bottlingplant.h"
 #include "printer.h"
 #include "nameserver.h"
 

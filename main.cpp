@@ -2,6 +2,19 @@
 #include <sstream>
 #include <ctime>
 #include "MPRNG.h"
+#include "bank.h"
+#include "bottlingplant.h"
+#include "config.h"
+#include "groupoff.h"
+#include "nameserver.h"
+#include "parent.h"
+#include "printer.h"
+#include "student.h"
+#include "truck.h"
+#include "vendingmachine.h"
+#include "watcard.h"
+#include "watcardoffice.h"
+
 
 MPRNG safeRandom;
 
@@ -16,73 +29,45 @@ namespace
 
 void uMain::main()
 {
-    unsigned int voters = 6;
-    unsigned int groupSize = 3;
-    unsigned int seed = time(NULL);
+    ConfigParms params;
+    unsigned int seed;
 
     switch(argc)
     {
-        case 4:
-        {
-            std::stringstream conv(argv[3]);
-            conv >> seed;
-            if(conv.fail() || seed < 0)
-            {
-                usage();
-                return;
-            }
-        }
-
-        case 3:
+        case 3:  
         {
             std::stringstream conv(argv[2]);
-            conv >> groupSize;
-            if(conv.fail() || groupSize < 0 || ((groupSize % 2) == 0))
+            conv >> seed;
+            if(conv.fail() || seed <= 0) 
             {
                 usage();
                 return;
             }
-        }
+            safeRandom.seed(seed);
+        } /* FALL THROUGH! */
         case 2:
-        {
-            std::stringstream conv(argv[1]);
-            conv >> voters;
-            if(conv.fail() || voters < 0 || ((voters % groupSize) != 0))
-            {std::cout << "test";
-                usage();
-                return;
-            }
+            processConfigFile(argv[1], params); 
+         break
 
-            break;
-        }
+         default:
+             
+                    Printer output(voters);
+                    TallyVotes tally(groupSize, output);
 
-        case 1: 
-        break;
-        
-        default:
-        usage();
-        return;
+                    Voter **tasks = new Voter *[voters];
+
+                    for(unsigned int i = 0; i < voters; i++)
+                    {
+                    tasks[i] = new Voter(i, tally, output);
+                    }
+
+                    for(unsigned int i = 0; i < voters; i++)
+                    {
+                    delete tasks[i];
+                    }
+
+                    delete []tasks;
+
+                    std::cout << "=================" << std::endl;
+                    std::cout << "All tours started" << std::endl;
     }
-    
-    safeRandom.seed(seed);
-
-    Printer output(voters);
-    TallyVotes tally(groupSize, output);
-
-    Voter **tasks = new Voter *[voters];
-
-    for(unsigned int i = 0; i < voters; i++)
-    {
-        tasks[i] = new Voter(i, tally, output);
-    }
-
-    for(unsigned int i = 0; i < voters; i++)
-    {
-        delete tasks[i];
-    }
-
-    delete []tasks;
-
-    std::cout << "=================" << std::endl;
-    std::cout << "All tours started" << std::endl;
-}

@@ -2,8 +2,6 @@
 #define PRINTER_H
 
 #include <iostream>
-#include "q3tallyVotes.h"
-#include "q3voter.h"
 
 struct bufferElement
 {
@@ -12,7 +10,7 @@ struct bufferElement
     unsigned int lid;
     int value1;
     int value2;
-    bufferElement() : inUse(false), lid = ~0u
+    bufferElement() : inUse(false), lid(~0u)
     {
     }
 };
@@ -25,7 +23,6 @@ _Monitor Printer
 
     void flush();
     void finalState();
-    int getIndex(Kind kind, unsigned int lid);
 
     public:
     enum Kind { Parent, Groupoff, WATCardOffice, NameServer, Truck, BottlingPlant, Student, Vending, Courier };
@@ -36,7 +33,9 @@ _Monitor Printer
     void print( Kind kind, unsigned int lid, char state );
     void print( Kind kind, unsigned int lid, char state, int value1 );
     void print( Kind kind, unsigned int lid, char state, int value1, int value2 );
-   
+    
+    private:
+    int getIndex(Kind kind, unsigned int lid);
 };
 
 #endif

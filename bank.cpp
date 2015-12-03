@@ -15,7 +15,7 @@ void Bank::deposit(unsigned int id, unsigned int amount)
 
 void Bank::withdraw(unsigned int id, unsigned int amount)
 {
-    while(accounts[i] < amount) //busy wait? 
+    while(accounts[i] < amount) 
     {
         _Accept(~Bank)
         {
