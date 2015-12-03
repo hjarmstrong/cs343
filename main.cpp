@@ -35,45 +35,62 @@ void uMain::main()
     switch(argc)
     {
         case 3:  
-        {
-            std::stringstream conv(argv[2]);
-            conv >> seed;
-            if(conv.fail() || seed <= 0) 
+            {
+                std::stringstream conv(argv[2]);
+                conv >> seed;
+                if(conv.fail() || seed <= 0) 
+                {
+                    usage();
+                    return;
+                }
+                safeRandom.seed(seed);
+            } /* FALL THROUGH! */
+        case 2:
+            {
+                processConfigFile(argv[1], params); 
+            } 
+            break;
+
+        default:
             {
                 usage();
                 return;
             }
-            safeRandom.seed(seed);
-        } /* FALL THROUGH! */
-        case 2:
-        {
-            processConfigFile(argv[1], params); 
-        } 
-        break;
-
-         default:
-         {
-             usage();
-             return;
-         }
     }
-             
-                    Printer output(voters);
-                    TallyVotes tally(groupSize, output);
 
-                    Voter **tasks = new Voter *[voters];
 
-                    for(unsigned int i = 0; i < voters; i++)
-                    {
-                    tasks[i] = new Voter(i, tally, output);
-                    }
 
-                    for(unsigned int i = 0; i < voters; i++)
-                    {
-                    delete tasks[i];
-                    }
+    Printer output(voters);
+    Bank bank(params.numStudents);
+    Parent parent(output, bank, params.numStudents, params.parentalDelay);
+    WATCardOffice office(output, bank, params.numCouriers);
+    Groupoff groupoff(output, params.numStudents, params.sodaCost, params.groupoffDelay);
+    NameServer nameserver(output, params.numVendingMachines, params.numStudents);
 
-                    delete []tasks;
+    VendingMachine *machines[params.numVendingMachines];
+    for(unsigned int i = 0; i < params.numVendingMachines; i++)
+    {
+        machines[i] = new VendingMachine(output, nameserver, i, params.sodaCost, params.maxStockPerFlavour);
+    }
 
-                    std::cout << "***********************" << std::endl;
+    BottlingPlant plant(output, nameserver, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
+
+    Student *students[params.numStudents];
+    for(unsigned int i = 0; i < params.numStudents; i++)
+    {
+        students[i] = new Student(output, nameserver, office, groupoff, i, params.maxPurchases);
+    }
+
+
+    for(unsigned int i = 0; i < params.numStudents; i++)
+    {
+        delete students[i];
+    }
+
+    for(unsigned int i = 0; i < params.numVendingMachines; i++)
+    {
+        delete machines[i];
+    }
+
+    std::cout << "***********************" << std::endl;
 }    
