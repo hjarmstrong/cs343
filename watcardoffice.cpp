@@ -106,7 +106,7 @@ void WATCardOffice::Courier::main()
             else
             {
                 card = current->oldcard;
-                delete current->oldcard;
+           //     delete current->oldcard;
             }
 
             card->deposit(current->reqVal);

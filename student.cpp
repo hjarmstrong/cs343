@@ -24,6 +24,7 @@ void Student::main()
 
     WATCard::FWATCard card = office.create(id, 5);
     WATCard::FWATCard gift = group.giftCard();
+    bool giftUsed = false;
 
     yield(safeRandom(1, 10));
 
@@ -45,7 +46,9 @@ void Student::main()
                     machine->buy(fav, *gift); 
                     print.print(Printer::Student, id, 'G', (*gift).getBalance());
                     
+                    delete gift; 
                     gift.reset();
+                    giftUsed = true;
                 }
 
                 yield(safeRandom(1, 10));
@@ -72,6 +75,12 @@ void Student::main()
         }
     }
 
-
+    card();
+    delete card;
+    if(!giftUsed)
+    {
+        gift();
+        delete gift;
+    }
    print.print(Printer::Student, id, 'F');
 }
