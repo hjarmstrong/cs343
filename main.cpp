@@ -50,7 +50,11 @@ void uMain::main()
                 processConfigFile(argv[1], params); 
             } 
             break;
-
+        case 1:
+            {
+                processConfigFile("soda.config", params);
+            }
+            break;
         default:
             {
                 usage();

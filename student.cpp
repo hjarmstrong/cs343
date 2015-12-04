@@ -34,7 +34,6 @@ void Student::main()
         { 
             _Enable
             {
-               // std::cout << "Fuck";
                 _Select(card)
                 {
                    machine->buy(fav, *card);
@@ -63,9 +62,9 @@ void Student::main()
         }
         catch(VendingMachine::Funds)
         {
-            WATCard *japan = card;
+            WATCard *oldCard = card;
             card.reset();
-            card = office.transfer(id, machine->cost() + 5, japan);
+            card = office.transfer(id, machine->cost() + 5, oldCard);
             i--;
         }
         catch(VendingMachine::Stock)

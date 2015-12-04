@@ -15,7 +15,6 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
 
 void BottlingPlant::getShipment(unsigned int cargo[])
 {
-    //std::cout << "FUCK\n";
     if(shutdown)
     {
         _Throw Shutdown();
