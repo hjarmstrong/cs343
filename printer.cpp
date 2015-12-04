@@ -188,7 +188,6 @@ void Printer::print( Kind kind, char state )
         buffer[kind].inUse = true; 
         buffer[kind].kind = kind;
         buffer[kind].state = state;
-        flush();
     }
 }
 
@@ -202,7 +201,6 @@ void Printer::print( Kind kind, char state, int value1 )
     buffer[kind].kind = kind;
     buffer[kind].state = state;
     buffer[kind].value1 = value1;
-        flush();
 }
 
 
@@ -217,7 +215,6 @@ void Printer::print( Kind kind, char state, int value1, int value2 )
     buffer[kind].state = state;
     buffer[kind].value1 = value1;
     buffer[kind].value2 = value2;
-        flush();
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state )
@@ -239,7 +236,6 @@ void Printer::print( Kind kind, unsigned int lid, char state )
         buffer[index].kind = kind;
         buffer[index].state = state;
         buffer[index].lid = lid;
-        flush();
     }
 }
 
@@ -256,7 +252,6 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1 )
     buffer[index].state = state;
     buffer[index].lid = lid;
     buffer[index].value1 = value1;
-        flush();
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state, int value1, int value2 )
@@ -273,5 +268,4 @@ void Printer::print( Kind kind, unsigned int lid, char state, int value1, int va
     buffer[index].lid = lid;
     buffer[index].value1 = value1;
     buffer[index].value2 = value2;
-        flush();
 }
