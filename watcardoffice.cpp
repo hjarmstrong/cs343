@@ -63,7 +63,8 @@ WATCardOffice::Job *WATCardOffice::requestWork()
         {
             return NULL;
         }
-        or _Accept(create);
+        or _Accept(create) {}
+        or _Accept(transfer);
     }
 
     Job *ret = work.front();

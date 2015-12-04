@@ -60,7 +60,9 @@ void Student::main()
         }
         catch(VendingMachine::Funds)
         {
-            office.transfer(id, machine->cost() + 5, card);
+            WATCard *japan = card;
+            card.reset();
+            card = office.transfer(id, machine->cost() + 5, japan);
             i--;
         }
         catch(VendingMachine::Stock)

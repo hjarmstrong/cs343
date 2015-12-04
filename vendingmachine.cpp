@@ -1,7 +1,7 @@
 #include "vendingmachine.h"
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, 
-    unsigned int sodaCost, unsigned int maxStockPerFlavour) : print(prt), 
+        unsigned int sodaCost, unsigned int maxStockPerFlavour) : print(prt), 
     nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour),
     currentStock(new unsigned int[NUM_FLAVOURS])
 {
@@ -24,25 +24,35 @@ void VendingMachine::main()
 
     for(;;)
     {
-        _Accept(~VendingMachine)
+        try
         {
-            print.print(Printer::Vending, id, 'F');
-            return;
-        }
-        or _Accept(VendingMachine::inventory)
-        {
-            print.print(Printer::Vending, id, 'r');
-            _Accept(~VendingMachine)
+            _Enable
             {
-                return;
-            }
-            or _Accept(VendingMachine::restocked)
-            {
-                print.print(Printer::Vending, id, 'R');
+                _Accept(~VendingMachine)
+                {
+                    print.print(Printer::Vending, id, 'F');
+                    return;
+                }
+                or _Accept(VendingMachine::inventory)
+                {
+                    print.print(Printer::Vending, id, 'r');
+                    _Accept(~VendingMachine)
+                    {
+                        return;
+                    }
+                    or _Accept(VendingMachine::restocked)
+                    {
+                        print.print(Printer::Vending, id, 'R');
+                    }
+                }
+                or _Accept(VendingMachine::buy)
+                {
+                }
             }
         }
-        or _Accept(VendingMachine::buy)
+        catch (uMutexFailure::RendezvousFailure)
         {
+            // This is expected, move on
         }
     }
 }
@@ -59,10 +69,10 @@ void VendingMachine::buy(Flavours flavour, WATCard &card)
     }
     else
     {
-        
+
         currentStock[flavour] -= 1;
         card.withdraw(sodaCost);
-        
+
         print.print(Printer::Vending, id, 'B', flavour, currentStock[flavour]);
     }
 }

@@ -9,7 +9,8 @@ Parent::Parent(Printer &prt, Bank &bank, unsigned int numStudents, unsigned int 
 
 void Parent::main()
 {
-    for(int i = 0;i < 10; i++)
+//    for(int i = 0;i < 19; i++)
+   for(;;)
     {
         _Accept(~Parent)
         {
