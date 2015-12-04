@@ -94,6 +94,7 @@ void WATCardOffice::Courier::main()
         if(safeRandom(0,5) == 0)
         {
             current->result.exception(new Lost());
+            delete current->oldcard;
         }
         else
         {
