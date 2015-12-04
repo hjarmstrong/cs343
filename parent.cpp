@@ -20,7 +20,7 @@ void Parent::main()
         {
             yield(parentalDelay);
 
-            int student = safeRandom(1, numStudents);
+            int student = safeRandom(0, numStudents - 1);
             int amount = safeRandom(1, 3);
 
             print.print(Printer::Parent, 'D', student, amount);
