@@ -72,7 +72,7 @@ unsigned int *VendingMachine::inventory()
     return currentStock;
 }
 
-void restocked()
+void VendingMachine::restocked()
 {
     //Allow sales to continue;
 }

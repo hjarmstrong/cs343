@@ -60,17 +60,20 @@ void Truck::main()
                 while((cargo[j] > 0) && (stock[j] < maxStock))
                 {
                     cargo[j]--;
+                    stock[j]++;
+
                     if(cargo[j] == 0)
                     {
                         zeros++;
                         print.print(Printer::Truck, 'U', lastMachine, maxStock - stock[j]);
                     }
 
-                    stock[j]++;
                 }
             }
-                        
-            print.print(Printer::Truck, 'U', lastMachine, totalShipment(cargo));
+
+            print.print(Printer::Truck, 'D', lastMachine, totalShipment(cargo));
+
+            machines[lastMachine]->restocked();
 
             if(zeros == VendingMachine::NUM_FLAVOURS)
             {
