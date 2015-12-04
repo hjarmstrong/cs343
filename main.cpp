@@ -30,7 +30,7 @@ namespace
 void uMain::main()
 {
     ConfigParms params;
-    unsigned int seed;
+    int seed;
 
     switch(argc)
     {
