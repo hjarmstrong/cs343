@@ -40,7 +40,9 @@ void WATCardOffice::main()
             print.print(Printer::WATCardOffice, 'F');
             return;
         }
-        or _Accept(create);
+        or _Accept(create) {}
+        or _Accept(requestWork) {}
+        or _Accept(transfer);
     }
 }
 
