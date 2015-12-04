@@ -36,7 +36,6 @@ void BottlingPlant::main()
     {
         _Accept(~BottlingPlant)
         {
-            print.print(Printer::BottlingPlant, 'F');
             break;
         }
         _Else
@@ -47,10 +46,23 @@ void BottlingPlant::main()
             print.print(Printer::BottlingPlant, 'G', generate);
 
             // Wait for truck to puck up production run
-            _Accept(getShipment);
+            _Accept(getShipment) {}
+            or
+            _Accept(~BottlingPlant) { break; }
         }
     }
 
+    print.print(Printer::BottlingPlant, 'F');
     shutdown = true;
+    try
+    {
+        _Enable
+        {
+            _Accept(getShipment);
+        }
+    }
+    catch (uMutexFailure::RendezvousFailure)
+    {
+    }
 }
 

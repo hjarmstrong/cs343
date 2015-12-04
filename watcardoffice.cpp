@@ -34,15 +34,15 @@ void WATCardOffice::main()
         {
             for(unsigned int i = 0; i < couriers.size(); i++)
             {
+                _Accept(requestWork);
                 delete couriers.at(i);
             }
 
             print.print(Printer::WATCardOffice, 'F');
             return;
         }
-        or _Accept(create) {}
-        or _Accept(requestWork) {}
-        or _Accept(transfer);
+        or _Accept(create) { _Accept(requestWork); }
+        or _Accept(transfer) { _Accept(requestWork); }
     }
 }
 
@@ -59,13 +59,8 @@ WATCardOffice::Job *WATCardOffice::requestWork()
 {
     if(work.empty())
     {
-        _Accept(~WATCardOffice)
-        {
             return NULL;
-        }
-        or _Accept(create) {}
-        or _Accept(transfer);
-    }
+    } 
 
     Job *ret = work.front();
     work.pop();
@@ -111,6 +106,7 @@ void WATCardOffice::Courier::main()
             else
             {
                 card = current->oldcard;
+                delete current->oldcard;
             }
 
             card->deposit(current->reqVal);

@@ -59,38 +59,40 @@ void uMain::main()
     }
 
 
-
-    Printer output(params.numStudents, params.numVendingMachines, params.numCouriers);
-    Bank bank(params.numStudents);
-    Parent parent(output, bank, params.numStudents, params.parentalDelay);
-    WATCardOffice office(output, bank, params.numCouriers);
-    Groupoff groupoff(output, params.numStudents, params.sodaCost, params.groupoffDelay);
-    NameServer nameserver(output, params.numVendingMachines, params.numStudents);
-
-    VendingMachine *machines[params.numVendingMachines];
-    for(unsigned int i = 0; i < params.numVendingMachines; i++)
     {
-        machines[i] = new VendingMachine(output, nameserver, i, params.sodaCost, params.maxStockPerFlavour);
+        Printer output(params.numStudents, params.numVendingMachines, params.numCouriers);
+        Bank bank(params.numStudents);
+        Parent parent(output, bank, params.numStudents, params.parentalDelay);
+        WATCardOffice office(output, bank, params.numCouriers);
+        Groupoff groupoff(output, params.numStudents, params.sodaCost, params.groupoffDelay);
+        NameServer nameserver(output, params.numVendingMachines, params.numStudents);
+
+        VendingMachine *machines[params.numVendingMachines];
+        for(unsigned int i = 0; i < params.numVendingMachines; i++)
+        {
+            machines[i] = new VendingMachine(output, nameserver, i, params.sodaCost, params.maxStockPerFlavour);
+        }
+
+        BottlingPlant *plant = new BottlingPlant(output, nameserver, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
+
+        Student *students[params.numStudents];
+        for(unsigned int i = 0; i < params.numStudents; i++)
+        {
+            students[i] = new Student(output, nameserver, office, groupoff, i, params.maxPurchases);
+        }
+
+
+        for(unsigned int i = 0; i < params.numStudents; i++)
+        {
+            delete students[i];
+        }
+
+        delete plant;
+
+        for(unsigned int i = 0; i < params.numVendingMachines; i++)
+        {
+            delete machines[i];
+        }
     }
-
-    BottlingPlant plant(output, nameserver, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
-
-    Student *students[params.numStudents];
-    for(unsigned int i = 0; i < params.numStudents; i++)
-    {
-        students[i] = new Student(output, nameserver, office, groupoff, i, params.maxPurchases);
-    }
-
-
-    for(unsigned int i = 0; i < params.numStudents; i++)
-    {
-        delete students[i];
-    }
-
-    for(unsigned int i = 0; i < params.numVendingMachines; i++)
-    {
-        delete machines[i];
-    }
-
     std::cout << "***********************" << std::endl;
 }    
