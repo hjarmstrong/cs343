@@ -1,3 +1,4 @@
+#include <iostream>
 #include "bottlingplant.h"
 #include "vendingmachine.h"
 #include "truck.h"
@@ -10,6 +11,21 @@ BottlingPlant::BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int
     maxStock(maxStockPerFlavour), time(timeBetweenShipments), shutdown(false)
 {
     print.print(Printer::BottlingPlant, 'S');
+}
+
+void BottlingPlant::getShipment(unsigned int cargo[])
+{
+    //std::cout << "FUCK\n";
+    if(shutdown)
+    {
+        _Throw Shutdown();
+    }
+
+    for(int i = 0; i < VendingMachine::NUM_FLAVOURS; i++)
+    {
+        cargo[i] = generate;
+    }
+    print.print(Printer::BottlingPlant, 'P');
 }
 
 void BottlingPlant::main()
@@ -38,16 +54,3 @@ void BottlingPlant::main()
     shutdown = true;
 }
 
-void BottlingPlant::getShipment(unsigned int cargo[])
-{
-    if(shutdown)
-    {
-        _Throw Shutdown();
-    }
-
-    for(int i = 0; i < VendingMachine::NUM_FLAVOURS; i++)
-    {
-        cargo[i] = generate;
-    }
-    print.print(Printer::BottlingPlant, 'P');
-}

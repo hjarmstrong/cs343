@@ -1,3 +1,4 @@
+#include <iostream>
 #include "student.h"
 #include "MPRNG.h"
 #include "watcard.h"
@@ -32,6 +33,7 @@ void Student::main()
         { 
             _Enable
             {
+               // std::cout << "Fuck";
                 _Select(card)
                 {
                    machine->buy(fav, *card);
@@ -41,7 +43,7 @@ void Student::main()
                 _Select(gift)
                 {
                     machine->buy(fav, *gift); 
-    print.print(Printer::Student, id, 'G', (*gift).getBalance());
+                    print.print(Printer::Student, id, 'G', (*gift).getBalance());
                     
                     gift.reset();
                 }

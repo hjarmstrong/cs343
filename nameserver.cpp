@@ -2,7 +2,8 @@
 #include "nameserver.h"
 
 NameServer::NameServer(Printer &prt, unsigned int numVendingMachines, unsigned int numStudents) :
-    print(prt), numVendingMachines(numVendingMachines), numStudents(numStudents)
+    print(prt), numVendingMachines(numVendingMachines), 
+    numStudents(numStudents), machineList(new VendingMachine *[numVendingMachines])
 {
     print.print(Printer::NameServer, 'S');
 
@@ -10,6 +11,11 @@ NameServer::NameServer(Printer &prt, unsigned int numVendingMachines, unsigned i
     {
         assignments[i] = i % numVendingMachines;
     }
+}
+
+NameServer::~NameServer()
+{
+    delete []machineList;
 }
 
 void NameServer::VMregister(VendingMachine *vendingmachine)
@@ -45,6 +51,7 @@ void NameServer::main()
             assert(false);
             return;
         }
+        or
         _Accept(NameServer::VMregister)
         {
         }

@@ -19,6 +19,7 @@ _Task NameServer {
     std::map<unsigned int, unsigned int> assignments; // Student id to mending machine id list
   public:
     NameServer(Printer &prt, unsigned int numVendingMachines, unsigned int numStudents);
+    ~NameServer();
     void VMregister(VendingMachine *vendingmachine);
     VendingMachine *getMachine(unsigned int id);
     VendingMachine **getMachineList();

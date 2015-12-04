@@ -1,3 +1,5 @@
+#include <iostream>
+#include <assert.h>
 #include "groupoff.h"
 #include "watcard.h"
 #include "MPRNG.h"
@@ -12,7 +14,7 @@ void Groupoff::main()
     {
         _Accept(~Groupoff)
         {
-            print.print(Printer::Groupoff, 'F');
+            assert(false);
             return;
         }
         _Else
@@ -20,15 +22,15 @@ void Groupoff::main()
             yield(groupoffDelay);
             WATCard *card = new WATCard();
             card->deposit(sodaCost);
-            
-            int index = safeRandom(0, cards.size());
-            
+                        
+            int index = safeRandom(0, cards.size() - 1);
             cards.at(index).delivery(card);
             print.print(Printer::Groupoff, 'D', sodaCost);
 
             cards.erase(cards.begin() + index);
         }
     }
+            print.print(Printer::Groupoff, 'F');
 }
 
 Groupoff::Groupoff(Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay) : 
@@ -39,8 +41,7 @@ print(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoff
 
 WATCard::FWATCard Groupoff::giftCard()
 {
-    unsigned int temp = index;
-    index += 1; 
-    index %= numStudents; //Increment index for the next caller
-    return cards[temp]; //Return cards[index]
+    WATCard::FWATCard card;
+    cards.push_back(card);
+    return card; //Return cards[index]
 }
