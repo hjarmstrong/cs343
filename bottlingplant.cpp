@@ -33,22 +33,15 @@ void BottlingPlant::main()
 
     for(;;)
     {
-        _Accept(~BottlingPlant)
-        {
-            break;
-        }
-        _Else
-        {
-            generate = safeRandom(0, maxShipped);
+        generate = safeRandom(0, maxShipped);
 
-            yield(time);
-            print.print(Printer::BottlingPlant, 'G', generate);
+        yield(time);
+        print.print(Printer::BottlingPlant, 'G', generate);
 
-            // Wait for truck to puck up production run
-            _Accept(getShipment) {}
-            or
-            _Accept(~BottlingPlant) { break; }
-        }
+        // Wait for truck to puck up production run
+        _Accept(getShipment) {}
+        or
+        _Accept(~BottlingPlant) { break; }
     }
 
     print.print(Printer::BottlingPlant, 'F');

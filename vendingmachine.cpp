@@ -1,9 +1,9 @@
 #include "vendingmachine.h"
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, 
-        unsigned int sodaCost, unsigned int maxStockPerFlavour) : print(prt), 
-    nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour),
-    currentStock(new unsigned int[NUM_FLAVOURS])
+        unsigned int sodaCost, unsigned int maxStockPerFlavour) : throwStock(false),
+    throwFunds(false), print(prt), nameServer(nameServer), id(id), sodaCost(sodaCost),
+    maxStockPerFlavour(maxStockPerFlavour), currentStock(new unsigned int[NUM_FLAVOURS])
 {
     print.print(Printer::Vending, id, 'S', sodaCost);
 
@@ -47,6 +47,15 @@ void VendingMachine::main()
                 }
                 or _Accept(VendingMachine::buy)
                 {
+                    if(currentStock[buyRequest] < 1)
+                    {
+                        throwStock = true;
+                    }
+                    else if(cardRequest->getBalance() < sodaCost)
+                    {
+                        throwFunds = true;
+                    }
+                    buying.signalBlock();
                 }
             }
         }
@@ -59,12 +68,17 @@ void VendingMachine::main()
 
 void VendingMachine::buy(Flavours flavour, WATCard &card)
 {
-    if(currentStock[flavour] < 1)
+    buyRequest = flavour;
+    cardRequest = &card;
+    buying.wait();
+    if(throwStock)
     {
+        throwStock = false;
         _Throw Stock();
     }
-    else if(card.getBalance() < sodaCost)
+    else if(throwFunds)
     {
+        throwFunds = false;
         _Throw Funds();
     }
     else

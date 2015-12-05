@@ -36,19 +36,19 @@ void Student::main()
             {
                 _Select(card)
                 {
-                   machine->buy(fav, *card);
-                   print.print(Printer::Student, id, 'B', (*card).getBalance());
+                    machine->buy(fav, *card);
+                    print.print(Printer::Student, id, 'B', (*card).getBalance());
                 }
                 or
-                _Select(gift)
-                {
-                    machine->buy(fav, *gift); 
-                    print.print(Printer::Student, id, 'G', (*gift).getBalance());
-                    
-                    delete gift; 
-                    gift.reset();
-                    giftUsed = true;
-                }
+                    _Select(gift)
+                    {
+                        machine->buy(fav, *gift); 
+                        print.print(Printer::Student, id, 'G', (*gift).getBalance());
+
+                        delete gift; 
+                        gift.reset();
+                        giftUsed = true;
+                    }
 
                 yield(safeRandom(1, 10));
             }
@@ -74,12 +74,23 @@ void Student::main()
         }
     }
 
-    card();
-    delete card;
+    print.print(Printer::Student, id, 'F');
+
+    try
+    { 
+        _Enable
+        {
+            card();
+            delete card;
+        }
+    }
+    catch(WATCardOffice::Lost)
+    {
+        // Since the card is lost its memory is gone, and we can move on
+    }
     if(!giftUsed)
     {
         gift();
         delete gift;
     }
-   print.print(Printer::Student, id, 'F');
 }

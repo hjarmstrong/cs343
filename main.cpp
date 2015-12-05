@@ -77,21 +77,22 @@ void uMain::main()
             machines[i] = new VendingMachine(output, nameserver, i, params.sodaCost, params.maxStockPerFlavour);
         }
 
-        BottlingPlant *plant = new BottlingPlant(output, nameserver, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
-
-        Student *students[params.numStudents];
-        for(unsigned int i = 0; i < params.numStudents; i++)
         {
-            students[i] = new Student(output, nameserver, office, groupoff, i, params.maxPurchases);
-        }
+            BottlingPlant plant(output, nameserver, params.numVendingMachines, params.maxShippedPerFlavour, params.maxStockPerFlavour, params.timeBetweenShipments);
+
+            Student *students[params.numStudents];
+            for(unsigned int i = 0; i < params.numStudents; i++)
+            {
+                students[i] = new Student(output, nameserver, office, groupoff, i, params.maxPurchases);
+            }
 
 
-        for(unsigned int i = 0; i < params.numStudents; i++)
-        {
-            delete students[i];
-        }
+            for(unsigned int i = 0; i < params.numStudents; i++)
+            {
+                delete students[i];
+            }
 
-        delete plant;
+        } // The bottling plant must stop before the vending machine are deleted
 
         for(unsigned int i = 0; i < params.numVendingMachines; i++)
         {

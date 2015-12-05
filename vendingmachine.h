@@ -12,6 +12,10 @@ _Task VendingMachine
   private:
     void main();
 
+    uCondition buying;
+    bool throwStock;
+    bool throwFunds;
+
     Printer &print; 
     NameServer &nameServer;
     unsigned int id;
@@ -31,6 +35,10 @@ _Task VendingMachine
     void restocked();
     _Nomutex unsigned int cost();
     _Nomutex unsigned int getId();
+    
+    private:
+      Flavours buyRequest;
+      WATCard *cardRequest;
 };
 
 #endif

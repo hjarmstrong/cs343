@@ -101,7 +101,7 @@ void Printer::finalState(Kind kind, unsigned int id = 0xDEAD)
 {
     for(unsigned int i = 0; i < elements; i++)
     {
-        if((i == kind && (id == 0xDEAD)) || (buffer[i].lid == id) && (buffer[i].kind == kind))
+        if(((i == kind) && (id == 0xDEAD)) || ((buffer[i].lid == id) && (buffer[i].kind == kind)))
         {
             std::cout << "F";
         }
