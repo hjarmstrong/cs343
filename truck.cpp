@@ -47,10 +47,10 @@ void Truck::main()
             return;
         }
 
-        int zeros = 0;
-        for(unsigned int i = 1; i <= numMachines; i++)
+        int zeros = 0; 
+        for(unsigned int i = 0; i < numMachines; i++)
         {
-            lastMachine = (lastMachine + i) % numMachines;
+            lastMachine = (lastMachine + 1) % numMachines;
 
             unsigned int *stock = machines[lastMachine]->inventory();
             print.print(Printer::Truck, 'd', lastMachine, totalShipment(cargo));
