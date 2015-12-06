@@ -29,7 +29,7 @@ _Monitor Printer
     
     private:
     int getIndex(Kind kind, unsigned int lid);
-    void finalState(Kind kind, unsigned int id);
+    void finalState(Kind kind, unsigned int *id);
 };
 
 struct bufferElement

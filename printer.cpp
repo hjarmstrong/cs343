@@ -97,11 +97,12 @@ void Printer::flush()
     std::cout << std::endl;
 }
 
-void Printer::finalState(Kind kind, unsigned int id = 0xDEAD)
+void Printer::finalState(Kind kind, unsigned int *id = NULL)
 {
     for(unsigned int i = 0; i < elements; i++)
     {
-        if(((i == kind) && (id == 0xDEAD)) || ((buffer[i].lid == id) && (buffer[i].kind == kind)))
+        if(((i == kind) && (id == NULL)) || 
+           ((id != NULL) && (buffer[i].lid == *id) && (buffer[i].kind == kind)))
         {
             std::cout << "F";
         }
@@ -224,7 +225,7 @@ void Printer::print( Kind kind, unsigned int lid, char state )
     if(state == 'F')
     {
         flush();
-        finalState(kind, lid);
+        finalState(kind, &lid);
     }
     else
     {

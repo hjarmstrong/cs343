@@ -22,7 +22,7 @@ void BottlingPlant::getShipment(unsigned int cargo[])
 
     for(int i = 0; i < VendingMachine::NUM_FLAVOURS; i++)
     {
-        cargo[i] = generate;
+        cargo[i] = generate[i];
     }
     print.print(Printer::BottlingPlant, 'P');
 }
@@ -33,15 +33,21 @@ void BottlingPlant::main()
 
     for(;;)
     {
-        generate = safeRandom(0, maxShipped);
+        int totalSoda = 0;
+        for(int i = 0; i < VendingMachine::NUM_FLAVOURS; i++)
+        {
+
+            generate[i] = safeRandom(0, maxShipped);
+            totalSoda += generate[i];
+        }
 
         yield(time);
-        print.print(Printer::BottlingPlant, 'G', generate);
+        print.print(Printer::BottlingPlant, 'G', totalSoda);
 
         // Wait for truck to puck up production run
         _Accept(getShipment) {}
         or
-        _Accept(~BottlingPlant) { break; }
+            _Accept(~BottlingPlant) { break; }
     }
 
     print.print(Printer::BottlingPlant, 'F');
@@ -55,6 +61,7 @@ void BottlingPlant::main()
     }
     catch (uMutexFailure::RendezvousFailure)
     {
+        // This is expected, it should not complete if the plant is finished
     }
 }
 
