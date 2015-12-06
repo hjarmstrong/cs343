@@ -64,10 +64,14 @@ void Truck::main()
 
                     if(cargo[j] == 0)
                     {
-                        zeros++;
                         print.print(Printer::Truck, 'U', lastMachine, maxStock - stock[j]);
                     }
 
+                }
+
+                if(cargo[j] == 0)
+                {
+                    zeros++;
                 }
             }
 

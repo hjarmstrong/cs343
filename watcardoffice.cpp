@@ -1,5 +1,6 @@
-#include "MPRNG.h"
+#include <iostream>
 #include <vector>
+#include "MPRNG.h"
 #include "watcardoffice.h"
 #include "watcard.h"
 
@@ -91,6 +92,7 @@ void WATCardOffice::Courier::main()
 
         print.print(Printer::Courier, id, 't', current->id, current->reqVal);
         bank.withdraw(current->id, current->reqVal);
+
         if(safeRandom(0,5) == 0)
         {
             current->result.exception(new Lost());

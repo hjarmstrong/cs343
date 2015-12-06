@@ -47,7 +47,7 @@ void BottlingPlant::main()
         // Wait for truck to puck up production run
         _Accept(getShipment) {}
         or
-            _Accept(~BottlingPlant) { break; }
+        _Accept(~BottlingPlant) { break; }
     }
 
     print.print(Printer::BottlingPlant, 'F');

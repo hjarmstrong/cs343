@@ -40,15 +40,15 @@ void Student::main()
                     print.print(Printer::Student, id, 'B', (*card).getBalance());
                 }
                 or
-                    _Select(gift)
-                    {
-                        machine->buy(fav, *gift); 
-                        print.print(Printer::Student, id, 'G', (*gift).getBalance());
+                _Select(gift)
+                {
+                    machine->buy(fav, *gift); 
+                    print.print(Printer::Student, id, 'G', (*gift).getBalance());
 
-                        delete gift; 
-                        gift.reset();
-                        giftUsed = true;
-                    }
+                    delete gift; 
+                    gift.reset();
+                    giftUsed = true;
+                }
 
                 yield(safeRandom(1, 10));
             }
@@ -88,6 +88,7 @@ void Student::main()
     {
         // Since the card is lost its memory is gone, and we can move on
     }
+
     if(!giftUsed)
     {
         gift();
